@@ -36,15 +36,18 @@ class SimplePIController:
     def update(self, measurement):
         # proportional error
         self.error = self.set_point - measurement
-
+        
         # integral error
         self.integral += self.error
+        if self.error < 0.:
+            result = 0.
+        else:
+            result = self.Kp * self.error + self.Ki * self.integral
+        return result
 
-        return self.Kp * self.error + self.Ki * self.integral
 
-
-controller = SimplePIController(0.1, 0.002)
-set_speed = 30
+controller = SimplePIController(0.05, 0.001)
+set_speed = 8
 controller.set_desired(set_speed)
 
 
